@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Board extends JPanel {
 
     public State SquareSelectState;
-    private final int SquareCount = 9;
+    private final int SquareCount = 4;
     private final int colCount;
     private final Square[][] SquareMatrix;
     public boolean wallBuild = false;
@@ -14,7 +14,7 @@ public class Board extends JPanel {
     private Square dest;
     private boolean startExists = false;
     private boolean destExists = false;
-    private final Graph graph;
+    public Graph graph;
 
     enum State {
         BLANK,
@@ -49,7 +49,7 @@ public class Board extends JPanel {
             this.graph.SquareHash.put(square, i);
 
             //attach edges to neighboring squares
-            this.ConnectSquareHelper(square, x, y);
+            this.ModifyEdge(square, x, y);
 
             //add the square into the SquareMatrix
             this.add(this.SquareMatrix[x][y]);
@@ -66,64 +66,106 @@ public class Board extends JPanel {
     }
 
     //Helper function to create edges to neighbor squares
-    public void ConnectSquareHelper(Square square, int x, int y) {
+    public void ModifyEdge(Square square, int x, int y) {
         //add vertical and horizontal edges
         try {
-            this.ConnectSquare(square,x - 1, y, 1);
+            //check to see if the board is in WALL mode
+            //if it is, remove edges instead
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x - 1, y);
+            } else {
+                this.ConnectSquare(square,x - 1, y, 1);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         try {
-            this.ConnectSquare(square, x + 1, y, 1);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x + 1, y);
+            } else {
+                this.ConnectSquare(square,x - 1, y, 1);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         try {
-            this.ConnectSquare(square, x, y - 1, 1);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x, y - 1);
+            } else {
+                this.ConnectSquare(square,x, y - 1, 1);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         try {
-            this.ConnectSquare(square, x, y + 1, 1);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x, y + 1);
+            } else {
+                this.ConnectSquare(square,x, y + 1, 1);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         //add horizontal edges
         try {
-            this.ConnectSquare(square,x - 1, y - 1, 1.4);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x - 1, y - 1);
+            } else {
+                this.ConnectSquare(square,x - 1, y - 1, 1.4);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         try {
-            this.ConnectSquare(square, x - 1, y + 1, 1.4);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x - 1, y + 1);
+            } else {
+                this.ConnectSquare(square,x - 1, y + 1, 1.4);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         try {
-            this.ConnectSquare(square, x + 1, y + 1, 1.4);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x + 1, y + 1);
+            } else {
+                this.ConnectSquare(square,x + 1, y + 1, 1.4);
+            }
         } catch (Exception e) {
             //nothing
         }
 
         try {
-            this.ConnectSquare(square, x + 1, y - 1, 1.4);
+            if (this.SquareSelectState == State.WALL) {
+                this.RemoveEdgeFromSquare(square,x + 1, y - 1);
+            } else {
+                this.ConnectSquare(square,x + 1, y - 1, 1.4);
+            }
         } catch (Exception e) {
             //nothing
         }
     }
 
     //Create an edge between a square and one of its neighbors
-    public void ConnectSquare(Square currSquare, int a, int b, double weight){
+    public void ConnectSquare(Square currSquare, int a, int b, double weight) {
         int currSquarePos = this.graph.SquareHash.get(currSquare);
         Square targetSquare = this.SquareMatrix[a][b];
         int targetSquarePos = this.graph.SquareHash.get(targetSquare);
         this.graph.addEdge(currSquarePos, targetSquarePos, weight);
+    }
+
+    //Remove an edge between a square and one of its neighbors
+    public void RemoveEdgeFromSquare(Square currSquare, int a, int b) {
+        int currSquarePos = this.graph.SquareHash.get(currSquare);
+        Square targetSquare = this.SquareMatrix[a][b];
+        int targetSquarePos = this.graph.SquareHash.get(targetSquare);
+        this.graph.removeEdge(currSquarePos, targetSquarePos);
     }
 
     //change the state of a square
@@ -160,6 +202,8 @@ public class Board extends JPanel {
             case WALL:
                 square.setBackground(Color.black);
                 square.ChangeState(Square.SquareState.WALL);
+                //remove edges from square
+                this.ModifyEdge(square, x, y);
                 break;
             default:
                 break;

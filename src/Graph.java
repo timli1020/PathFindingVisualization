@@ -23,8 +23,8 @@ public class Graph {
 
     //remove edge to from one square to another
     public void removeEdge(int i , int j) {
-        adjMatrix[i][j] = -1;
-        adjMatrix[j][i] = -1;
+        adjMatrix[i][j] = 0;
+        adjMatrix[j][i] = 0;
     }
 
     //prints out the adjacency matrix
