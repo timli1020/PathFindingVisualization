@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class Board extends JPanel {
 
-    public String SquareSelectState = "blank";
+    public State SquareSelectState;
     private final int SquareCount = 9;
     private final int colCount;
     private final Square[][] SquareMatrix;
@@ -16,8 +16,15 @@ public class Board extends JPanel {
     private boolean destExists = false;
     private final Graph graph;
 
+    enum State {
+        BLANK,
+        STARTDEST,
+        WALL
+    }
+
     public Board() {
         //set up the board
+        this.SquareSelectState = State.BLANK;
         this.colCount = (int) Math.sqrt(this.SquareCount);
         this.SquareMatrix= new Square[this.colCount + 1][this.colCount + 1];
         //init a new graph
@@ -126,33 +133,33 @@ public class Board extends JPanel {
         Square square = this.SquareMatrix[x][y];
 
         switch (this.SquareSelectState) {
-            case "blank":
+            case BLANK:
                 return;
-            case "start/dest":
+            case STARTDEST:
                 if (!this.startExists) {
                     this.startExists = true;
                     square.setBackground(Color.green);
-                    square.ChangeState("start");
+                    square.ChangeState(Square.SquareState.START);
                 } else {
                     if (!this.destExists) {
                         this.dest = square;
                         this.destExists = true;
                         square.setBackground(Color.red);
-                        square.ChangeState("dest");
+                        square.ChangeState(Square.SquareState.DEST);
                     } else {
-                        this.dest.ChangeState("blank");
+                        this.dest.ChangeState(Square.SquareState.BlANK);
                         this.dest.setBackground(Color.white);
 
                         this.dest = square;
                         this.destExists = true;
                         square.setBackground(Color.red);
-                        square.ChangeState("dest");
+                        square.ChangeState(Square.SquareState.DEST);
                     }
                 }
                 break;
-            case "wall":
+            case WALL:
                 square.setBackground(Color.black);
-                square.ChangeState("wall");
+                square.ChangeState(Square.SquareState.WALL);
                 break;
             default:
                 break;

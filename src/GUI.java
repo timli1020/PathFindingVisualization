@@ -57,13 +57,13 @@ public class GUI extends JFrame {
 
     //place start and dest cells
     private void StartDestButton() {
-        this.board.SquareSelectState = "start/dest";
+        this.board.SquareSelectState = Board.State.STARTDEST;
         this.board.wallBuild = false;
     }
 
     //place wall cells
     private void WallButton() {
-        this.board.SquareSelectState = "wall";
+        this.board.SquareSelectState = Board.State.WALL;
         this.board.wallBuild = true;
     }
 

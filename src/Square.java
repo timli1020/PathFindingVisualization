@@ -8,13 +8,20 @@ import java.awt.event.MouseEvent;
 
 public class Square extends JLabel {
     //states: blank, wall, start, end
-    private String state;
+    private SquareState state;
     private Color color;
     private Point location;
     private Board parentBoard;
 
+    enum SquareState {
+        BlANK,
+        START,
+        DEST,
+        WALL
+    }
+
     public Square(int x, int y, Board _parentBaord) {
-        this.state = "blank";
+        this.state = SquareState.BlANK;
         this.color = Color.white;
         this.location = new Point(x, y);
         this.parentBoard = _parentBaord;
@@ -66,7 +73,7 @@ public class Square extends JLabel {
 
     private void StartWallBuild() {
         //start wall building
-        if (!this.parentBoard.SquareSelectState.equals("wall")){
+        if (this.parentBoard.SquareSelectState != Board.State.WALL){
             return;
         }
         this.ActivateSquare();
@@ -87,7 +94,7 @@ public class Square extends JLabel {
         this.parentBoard.SquareStateChange(this.location);
     }
 
-    public void ChangeState(String _state) {
+    public void ChangeState(SquareState _state) {
         this.state = _state;
     }
 }
