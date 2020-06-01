@@ -47,6 +47,18 @@ public class GUI extends JFrame {
                 WallButton();
             }
         });
+
+        //Action listener for Dijkstra Button
+        dikjstraButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                PerformDijkstra();
+            }
+        });
+    }
+
+    private void PerformDijkstra() {
+        this.board.graph.dijkstra_GetMinDistances(0);
     }
 
     //reset the board

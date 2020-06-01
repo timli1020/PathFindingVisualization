@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Board extends JPanel {
 
     public State SquareSelectState;
-    private final int SquareCount = 4;
+    private final int SquareCount = 100;
     private final int colCount;
     private final Square[][] SquareMatrix;
     public boolean wallBuild = false;
@@ -15,6 +15,7 @@ public class Board extends JPanel {
     private boolean startExists = false;
     private boolean destExists = false;
     public Graph graph;
+
 
     enum State {
         BLANK,
@@ -62,7 +63,7 @@ public class Board extends JPanel {
             }
         }
 
-        System.out.println(this.graph.toString());
+        //System.out.println(this.graph.toString());
     }
 
     //Helper function to create edges to neighbor squares
