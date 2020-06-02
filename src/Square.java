@@ -8,7 +8,7 @@ import java.awt.event.MouseEvent;
 
 public class Square extends JLabel {
     //states: blank, wall, start, end
-    private SquareState state;
+    public SquareState state;
     private Color color;
     private Point location;
     private Board parentBoard;
@@ -17,7 +17,9 @@ public class Square extends JLabel {
         BlANK,
         START,
         DEST,
-        WALL
+        WALL,
+        VISTED,
+        PATH
     }
 
     public Square(int x, int y, Board _parentBaord) {
@@ -83,7 +85,7 @@ public class Square extends JLabel {
     private void EndWallBuild() {
         this.parentBoard.wallBuild = false;
         this.parentBoard.mousedPressed = false;
-        //System.out.println(this.parentBoard.graph.toString());
+        System.out.println(this.parentBoard.graph.toString());
     }
 
     private void MouseEnteredSquare() {

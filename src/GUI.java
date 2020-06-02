@@ -52,13 +52,17 @@ public class GUI extends JFrame {
         dikjstraButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                PerformDijkstra();
+                try {
+                    PerformDijkstra();
+                } catch (InterruptedException interruptedException) {
+                    interruptedException.printStackTrace();
+                }
             }
         });
     }
 
-    private void PerformDijkstra() {
-        this.board.graph.dijkstra_GetMinDistances(0);
+    private void PerformDijkstra() throws InterruptedException {
+        this.board.Dijkstra();
     }
 
     //reset the board

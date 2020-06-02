@@ -6,12 +6,13 @@ import javax.swing.*;
 public class Board extends JPanel {
 
     public State SquareSelectState;
-    private final int SquareCount = 100;
+    private final int SquareCount = 2500;
     private final int colCount;
     private final Square[][] SquareMatrix;
     public boolean wallBuild = false;
     public boolean mousedPressed = false;
     private Square dest;
+    private Square start;
     private boolean startExists = false;
     private boolean destExists = false;
     public Graph graph;
@@ -48,6 +49,7 @@ public class Board extends JPanel {
             this.SquareMatrix[x][y] = square;
             //put this square into a hash table to keep track of its position in the SquareMatrix
             this.graph.SquareHash.put(square, i);
+            this.graph.IntForSquareHash.put(i, square);
 
             //attach edges to neighboring squares
             this.ModifyEdge(square, x, y);
@@ -64,6 +66,12 @@ public class Board extends JPanel {
         }
 
         //System.out.println(this.graph.toString());
+    }
+
+    public void Dijkstra() throws InterruptedException {
+        int sourceSquare = this.graph.SquareHash.get(this.start);
+        int destSquare = this.graph.SquareHash.get(this.dest);
+        this.graph.dijkstra_GetMinDistances(sourceSquare, destSquare);
     }
 
     //Helper function to create edges to neighbor squares
@@ -181,6 +189,7 @@ public class Board extends JPanel {
             case STARTDEST:
                 if (!this.startExists) {
                     this.startExists = true;
+                    this.start = square;
                     square.setBackground(Color.green);
                     square.ChangeState(Square.SquareState.START);
                 } else {
@@ -199,6 +208,7 @@ public class Board extends JPanel {
                         square.ChangeState(Square.SquareState.DEST);
                     }
                 }
+                System.out.println(this.start);
                 break;
             case WALL:
                 square.setBackground(Color.black);
