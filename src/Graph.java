@@ -47,9 +47,9 @@ public class Graph {
                 || square.state == Square.SquareState.DEST) {
             return;
         } else if (square.state == Square.SquareState.PATH){
-            this.IntForSquareHash.get(squarePos).setBackground(Color.blue);
+            this.IntForSquareHash.get(squarePos).setBackground(Color.yellow);
         } else {
-            this.IntForSquareHash.get(squarePos).setBackground(Color.darkGray);
+            this.IntForSquareHash.get(squarePos).setBackground(Color.gray);
         }
     }
 
@@ -65,19 +65,8 @@ public class Graph {
         return vertex;
     }
 
-    int getMinDist2(double[] dist, LinkedList queue) {
-        double min = Double.POSITIVE_INFINITY;
-        int min_index = -1;
-        for (int i = 0; i < dist.length; i++) {
-            if (dist[i] < min && queue.contains(i)) {
-                min = dist[i];
-                min_index = i;
-            }
-        }
-        return min_index;
-    }
 
-    public void dijkstra_GetMinDistances(int sourceVertex, int destVertex) throws InterruptedException {
+    public void dijkstra(int sourceVertex, int destVertex) throws InterruptedException {
         boolean[] spt = new boolean[this.verticesCount];
         double[] distance = new double[this.verticesCount];
         int INFINITY = Integer.MAX_VALUE;
@@ -136,83 +125,6 @@ public class Graph {
         this.DrawPath(pathList);
     }
 
-    public void dijkstra(int sourceVertex, int destVertex) throws InterruptedException {
-        int nVertices = this.adjMatrix[0].length;
-
-        // shortestDistances[i] will hold the
-        // shortest distance from src to i
-        double[] shortestDistances = new double[nVertices];
-
-        // added[i] will true if vertex i is
-        // included / in shortest path tree
-        // or shortest distance from src to
-        // i is finalized
-        boolean[] added = new boolean[nVertices];
-
-        // Initialize all distances as
-        // INFINITE and added[] as false
-        for (int vertexIndex = 0; vertexIndex < nVertices;
-             vertexIndex++) {
-            shortestDistances[vertexIndex] = Integer.MAX_VALUE;
-            added[vertexIndex] = false;
-        }
-
-        // Distance of source vertex from
-        // itself is always 0
-        shortestDistances[sourceVertex] = 0;
-
-        // Parent array to store shortest
-        // path tree
-        int[] parents = new int[nVertices];
-
-        // The starting vertex does not
-        // have a parent
-        parents[sourceVertex] = 0;
-
-        // Find shortest path for all
-        // vertices
-        for (int i = 1; i < nVertices; i++) {
-
-            if(i == destVertex) {
-                break;
-            }
-
-
-
-            // Pick the minimum distance vertex
-            // from the set of vertices not yet
-            // processed. nearestVertex is
-            // always equal to startNode in
-            // first iteration.
-            int nearestVertex = -1;
-            double shortestDistance = Double.POSITIVE_INFINITY;
-            for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
-                if (!added[vertexIndex] && shortestDistances[vertexIndex] < shortestDistance) {
-                    nearestVertex = vertexIndex;
-                    shortestDistance = shortestDistances[vertexIndex];
-                }
-            }
-
-            // Mark the picked vertex as
-            // processed
-            added[nearestVertex] = true;
-
-            // Update dist value of the
-            // adjacent vertices of the
-            // picked vertex.
-            for (int vertexIndex = 0; vertexIndex < nVertices; vertexIndex++) {
-                double edgeDistance = this.adjMatrix[nearestVertex][vertexIndex];
-
-                if (edgeDistance > 0 && ((shortestDistance + edgeDistance) < shortestDistances[vertexIndex])) {
-                    parents[vertexIndex] = nearestVertex;
-                    shortestDistances[vertexIndex] = shortestDistance + edgeDistance;
-                    this.changeSquareState(vertexIndex);
-                }
-            }
-        }
-
-        PreparePath(sourceVertex, destVertex, shortestDistances, parents);
-    }
 
     public void printDijkstra(int sourceVertex, double[] key) {
         System.out.println("Dijkstra Algorithm: (Adjacency Matrix)");

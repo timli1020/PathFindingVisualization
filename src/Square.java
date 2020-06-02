@@ -85,7 +85,6 @@ public class Square extends JLabel {
     private void EndWallBuild() {
         this.parentBoard.wallBuild = false;
         this.parentBoard.mousedPressed = false;
-        System.out.println(this.parentBoard.graph.toString());
     }
 
     private void MouseEnteredSquare() {

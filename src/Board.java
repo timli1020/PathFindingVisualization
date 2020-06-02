@@ -6,7 +6,7 @@ import javax.swing.*;
 public class Board extends JPanel {
 
     public State SquareSelectState;
-    private final int SquareCount = 2500;
+    private final int SquareCount = 3600;
     private final int colCount;
     private final Square[][] SquareMatrix;
     public boolean wallBuild = false;
@@ -71,7 +71,7 @@ public class Board extends JPanel {
     public void Dijkstra() throws InterruptedException {
         int sourceSquare = this.graph.SquareHash.get(this.start);
         int destSquare = this.graph.SquareHash.get(this.dest);
-        this.graph.dijkstra_GetMinDistances(sourceSquare, destSquare);
+        this.graph.dijkstra(sourceSquare, destSquare);
     }
 
     //Helper function to create edges to neighbor squares
@@ -215,6 +215,32 @@ public class Board extends JPanel {
                 square.ChangeState(Square.SquareState.WALL);
                 //remove edges from square
                 this.ModifyEdge(square, x, y);
+
+                //diagonal wall case
+                if (this.SquareMatrix[x-1][y+1].state == Square.SquareState.WALL) {
+                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x-1][y]);
+                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
+                    this.graph.removeEdge(fromSquarePos, toSquarePos);
+                }
+
+                if (this.SquareMatrix[x+1][y+1].state == Square.SquareState.WALL) {
+                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y+1]);
+                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x+1][y]);
+                    this.graph.removeEdge(fromSquarePos, toSquarePos);
+                }
+
+                if (this.SquareMatrix[x+1][y-1].state == Square.SquareState.WALL) {
+                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
+                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x+1][y]);
+                    this.graph.removeEdge(fromSquarePos, toSquarePos);
+                }
+
+                if (this.SquareMatrix[x-1][y-1].state == Square.SquareState.WALL) {
+                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
+                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x-1][y]);
+                    this.graph.removeEdge(fromSquarePos, toSquarePos);
+                }
+
                 break;
             default:
                 break;
