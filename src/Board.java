@@ -216,30 +216,36 @@ public class Board extends JPanel {
                 //remove edges from square
                 this.ModifyEdge(square, x, y);
 
-                //diagonal wall case
-                if (this.SquareMatrix[x-1][y+1].state == Square.SquareState.WALL) {
-                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x-1][y]);
-                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
-                    this.graph.removeEdge(fromSquarePos, toSquarePos);
+                try {
+                    //diagonal wall case
+                    if (this.SquareMatrix[x-1][y+1].state == Square.SquareState.WALL) {
+                        int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x-1][y]);
+                        int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
+                        this.graph.removeEdge(fromSquarePos, toSquarePos);
+                    }
+
+                    if (this.SquareMatrix[x+1][y+1].state == Square.SquareState.WALL) {
+                        int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y+1]);
+                        int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x+1][y]);
+                        this.graph.removeEdge(fromSquarePos, toSquarePos);
+                    }
+
+                    if (this.SquareMatrix[x+1][y-1].state == Square.SquareState.WALL) {
+                        int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
+                        int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x+1][y]);
+                        this.graph.removeEdge(fromSquarePos, toSquarePos);
+                    }
+
+                    if (this.SquareMatrix[x-1][y-1].state == Square.SquareState.WALL) {
+                        int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
+                        int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x-1][y]);
+                        this.graph.removeEdge(fromSquarePos, toSquarePos);
+                    }
+
+                } catch (Exception e) {
+
                 }
 
-                if (this.SquareMatrix[x+1][y+1].state == Square.SquareState.WALL) {
-                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y+1]);
-                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x+1][y]);
-                    this.graph.removeEdge(fromSquarePos, toSquarePos);
-                }
-
-                if (this.SquareMatrix[x+1][y-1].state == Square.SquareState.WALL) {
-                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
-                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x+1][y]);
-                    this.graph.removeEdge(fromSquarePos, toSquarePos);
-                }
-
-                if (this.SquareMatrix[x-1][y-1].state == Square.SquareState.WALL) {
-                    int fromSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x][y-1]);
-                    int toSquarePos = this.graph.SquareHash.get(this.SquareMatrix[x-1][y]);
-                    this.graph.removeEdge(fromSquarePos, toSquarePos);
-                }
 
                 break;
             default:
